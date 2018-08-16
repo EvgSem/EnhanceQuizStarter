@@ -14,6 +14,8 @@
 		972A72BB2056F06C0059EF4A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 972A72B92056F06C0059EF4A /* LaunchScreen.storyboard */; };
 		972A72C32056F0E40059EF4A /* GameSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 972A72C22056F0E40059EF4A /* GameSound.wav */; };
 		C7123DAB21234609002223A0 /* Question.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7123DAA21234609002223A0 /* Question.swift */; };
+		C7123DAE2124D40B002223A0 /* CorrectAnswer.wav in Resources */ = {isa = PBXBuildFile; fileRef = C7123DAC2124D40B002223A0 /* CorrectAnswer.wav */; };
+		C7123DAF2124D40B002223A0 /* WrongAnswer.wav in Resources */ = {isa = PBXBuildFile; fileRef = C7123DAD2124D40B002223A0 /* WrongAnswer.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		972A72BC2056F06C0059EF4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		972A72C22056F0E40059EF4A /* GameSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = GameSound.wav; sourceTree = "<group>"; };
 		C7123DAA21234609002223A0 /* Question.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Question.swift; sourceTree = "<group>"; };
+		C7123DAC2124D40B002223A0 /* CorrectAnswer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = CorrectAnswer.wav; sourceTree = "<group>"; };
+		C7123DAD2124D40B002223A0 /* WrongAnswer.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = WrongAnswer.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,8 @@
 				972A72B72056F06C0059EF4A /* Assets.xcassets */,
 				972A72B92056F06C0059EF4A /* LaunchScreen.storyboard */,
 				972A72BC2056F06C0059EF4A /* Info.plist */,
+				C7123DAC2124D40B002223A0 /* CorrectAnswer.wav */,
+				C7123DAD2124D40B002223A0 /* WrongAnswer.wav */,
 				972A72C22056F0E40059EF4A /* GameSound.wav */,
 			);
 			path = EnhanceQuizStarter;
@@ -132,6 +138,8 @@
 				972A72C32056F0E40059EF4A /* GameSound.wav in Resources */,
 				972A72BB2056F06C0059EF4A /* LaunchScreen.storyboard in Resources */,
 				972A72B82056F06C0059EF4A /* Assets.xcassets in Resources */,
+				C7123DAE2124D40B002223A0 /* CorrectAnswer.wav in Resources */,
+				C7123DAF2124D40B002223A0 /* WrongAnswer.wav in Resources */,
 				972A72B62056F06C0059EF4A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

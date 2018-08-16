@@ -15,11 +15,14 @@ class ViewController: UIViewController {
     // MARK: - Properties
     
     let questionsPerRound = 10
-    var questionsAsked = 0
+    var questionsAsked = -1
     var correctQuestions = 0
     var indexOfSelectedQuestion = 0
+    var counter = 0
     
     var gameSound: SystemSoundID = 0
+    var correctAnswerSound: SystemSoundID = 1
+    var wrongAnswerSound: SystemSoundID = 2
     var trivia = [Question]()
     
     // MARK: - Outlets
@@ -34,7 +37,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         generateQuestions()
-        loadGameStartSound()
+        loadSounds()
         playGameStartSound()
         displayQuestion()
     }
@@ -43,26 +46,53 @@ class ViewController: UIViewController {
     
     // MARK: - Helpers
     
-    func loadGameStartSound() {
-        let path = Bundle.main.path(forResource: "GameSound", ofType: "wav")
-        let soundUrl = URL(fileURLWithPath: path!)
-        AudioServicesCreateSystemSoundID(soundUrl as CFURL, &gameSound)
+    func loadSounds() {
+        let gameSoundPath = Bundle.main.path(forResource: "GameSound", ofType: "wav")
+        let gameSoundSoundUrl = URL(fileURLWithPath: gameSoundPath!)
+        AudioServicesCreateSystemSoundID(gameSoundSoundUrl as CFURL, &gameSound)
+        
+        let correctAnswerPath = Bundle.main.path(forResource: "CorrectAnswer", ofType: "wav")
+        let correctAnswerSoundUrl = URL(fileURLWithPath: correctAnswerPath!)
+        AudioServicesCreateSystemSoundID(correctAnswerSoundUrl as CFURL, &correctAnswerSound)
+        
+        let wrongAnswerPath = Bundle.main.path(forResource: "WrongAnswer", ofType: "wav")
+        let wrongAnswerSoundUrl = URL(fileURLWithPath: wrongAnswerPath!)
+        AudioServicesCreateSystemSoundID(wrongAnswerSoundUrl as CFURL, &wrongAnswerSound)
     }
     
     func playGameStartSound() {
         AudioServicesPlaySystemSound(gameSound)
     }
     
+    func playCorrectAnswerSound() {
+        AudioServicesPlaySystemSound(correctAnswerSound)
+    }
+    
+    func playWrongSoundSound() {
+        AudioServicesPlaySystemSound(wrongAnswerSound)
+    }
+    
     func displayQuestion() {
+        
         indexOfSelectedQuestion = GKRandomSource.sharedRandom().nextInt(upperBound: trivia.count)
         let questionDictionary = trivia[indexOfSelectedQuestion]
         questionField.text = questionDictionary.questionTitle
-        option1Button.setTitle(questionDictionary.options[0].name, for: .normal)
-        option2Button.setTitle(questionDictionary.options[1].name, for: .normal)
-        option3Button.setTitle(questionDictionary.options[2].name, for: .normal)
-        option4Button.setTitle(questionDictionary.options[3].name, for: .normal)
-
+        
+        var buttons = [option1Button, option2Button, option3Button, option4Button]
+        
+        for i in 0..<questionDictionary.options.count {
+            
+            buttons[i]?.setTitle(questionDictionary.options[i].name, for: .normal)
+            buttons[i]?.isHidden = false
+        }
+        
+        for i in questionDictionary.options.count..<buttons.count{
+            buttons[i]?.isHidden = true
+        }
+        
         playAgainButton.isHidden = true
+        questionsAsked += 1
+        loadNextRound(delay: 15)
     }
     
     func displayScore() {
@@ -89,6 +119,8 @@ class ViewController: UIViewController {
     }
     
     func loadNextRound(delay seconds: Int) {
+        
+        let localQuestionsAsked = questionsAsked
         // Converts a delay in seconds to nanoseconds as signed 64 bit integer
         let delay = Int64(NSEC_PER_SEC * UInt64(seconds))
         // Calculates a time value to execute the method given current time and delay
@@ -96,15 +128,15 @@ class ViewController: UIViewController {
         
         // Executes the nextRound method at the dispatch time on the main queue
         DispatchQueue.main.asyncAfter(deadline: dispatchTime) {
-            self.nextRound()
+            if localQuestionsAsked == self.questionsAsked {
+                self.nextRound()
+            }
         }
     }
     
     // MARK: - Actions
     
     @IBAction func checkAnswer(_ sender: UIButton) {
-        // Increment the questions asked counter
-        questionsAsked += 1
         
         let selectedQuestionDict = trivia[indexOfSelectedQuestion]
         let correctAnswer = selectedQuestionDict.options[selectedQuestionDict.answer].name
@@ -114,9 +146,12 @@ class ViewController: UIViewController {
         if usersAnswer == correctAnswer {
             correctQuestions += 1
             questionField.text = "Correct!"
+            playCorrectAnswerSound()
         } else {
-            questionField.text = "Sorry, wrong answer!"
+            questionField.text = "Sorry, wrong answer! \n Correct answer is \(correctAnswer)."
+            playWrongSoundSound()
         }
+        trivia.remove(at: indexOfSelectedQuestion)
         
         loadNextRound(delay: 2)
     }
@@ -128,10 +163,10 @@ class ViewController: UIViewController {
         option2Button.isHidden = false
         option3Button.isHidden = false
         option4Button.isHidden = false
-
         
         questionsAsked = 0
         correctQuestions = 0
+        generateQuestions()
         nextRound()
     }
     
@@ -141,12 +176,12 @@ class ViewController: UIViewController {
         let q1 = Question(questionTitle: "This was the only US President to serve more than two consecutive terms.",
                           options: [Option(name: "George Washington"),
                                     Option(name: "Franklin D. Roosevelt"),
-                                    Option(name: "Woodrow Wilson"),
+                                  //  Option(name: "Woodrow Wilson"),
                                     Option(name: "Andrew Jackson")],
                           answer: 1)
         let q2 = Question(questionTitle: "Which of the following countries has the most residents?",
                           options: [Option(name: "Nigeria"),
-                                    Option(name: "Russia"),
+                                   // Option(name: "Russia"),
                                     Option(name: "Iran"),
                                     Option(name: "Vietnam")],
                           answer: 0)
@@ -170,11 +205,11 @@ class ViewController: UIViewController {
                                     Option(name: "Boston")],
                           answer: 2)
         let q6 = Question(questionTitle: "Which country has most recently won consecutive World Cups in Soccer?",
-                          options: [Option(name: "Paris"),
-                                    Option(name: "Washington D.C."),
-                                    Option(name: "New York City"),
-                                    Option(name: "Boston")],
-                          answer: 2)
+                          options: [Option(name: "Italy"),
+                                    Option(name: "Brazil"),
+                                    Option(name: "Argetina"),
+                                    Option(name: "Spain")],
+                          answer: 1)
         let q7 = Question(questionTitle: "Which of the following rivers is longest?",
                           options: [Option(name: "Yangtze"),
                                     Option(name: "Mississippi"),
@@ -201,7 +236,6 @@ class ViewController: UIViewController {
                            answer: 3)
         
         trivia = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10]
-        
     }
 
 }

@@ -10,5 +10,21 @@
             </PersistentString>
          </PersistentStrings>
       </ContextState>
+      <ContextState
+         contextName = "ViewController.displayQuestion():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "questionnaire.questions.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.checkAnswer(_:):ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexOfSelectedQuestion">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
    </ContextStates>
 </VariablesViewState>
